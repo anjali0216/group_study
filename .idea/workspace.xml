@@ -19,7 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="327f0f16-9877-4966-9aa7-03f48bf066fd" name="Default Changelist" comment="update" />
+    <list default="true" id="327f0f16-9877-4966-9aa7-03f48bf066fd" name="Default Changelist" comment="update">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +93,14 @@
       <option name="project" value="LOCAL" />
       <updated>1617645477339</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="update">
+      <created>1617645750334</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617645750334</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -131,18 +140,26 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="1236" height="293" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1617645423733" />
+    <state x="399" y="61" key="RollbackChangesDialog" timestamp="1617646351250">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="399" y="61" key="RollbackChangesDialog/0.0.1280.680@0.0.1280.680" timestamp="1617646351250" />
     <state x="121" y="0" key="SettingsEditor" timestamp="1617630099866">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="121" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1617630099866" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1617644982724">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1617645977631">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1617644982724" />
-    <state x="404" y="75" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1617645471746">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1617645977631" />
+    <state x="404" y="75" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1617645527796">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="404" y="75" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1280.680@0.0.1280.680" timestamp="1617645471746" />
+    <state x="404" y="75" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.0.1280.680@0.0.1280.680" timestamp="1617645527796" />
+    <state x="358" y="129" key="git4idea.merge.GitPullDialog" timestamp="1617645769486">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="358" y="129" key="git4idea.merge.GitPullDialog/0.0.1280.680@0.0.1280.680" timestamp="1617645769486" />
     <state x="298" y="151" key="run.anything.popup" timestamp="1617626006688">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
