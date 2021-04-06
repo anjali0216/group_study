@@ -1,14 +1,14 @@
-import 'dart:convert';
+ import 'dart:io';
 
-  //import 'package:blogapp/Pages/ForgetPassword.dart';
-  import 'package:group_study/pages/HomePage.dart';
-  import 'package:group_study/pages/SignUpPage.dart';
+import 'package:group_study/pages/SignUpPage.dart';
   import "package:flutter/material.dart";
+import 'package:group_study/pages/StudentDetails.dart';
+ import 'package:http/http.dart' as http;
+ import 'dart:convert' as convert;
 
-  import '../NetworkHandler.dart';
-  //import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'SigninDetails.dart';
 
-import 'HomePage.dart';
+const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
 
   class SignInPage extends StatefulWidget {
     SignInPage({Key key}) : super(key: key);
@@ -19,14 +19,12 @@ import 'HomePage.dart';
 
   class _SignInPageState extends State<SignInPage> {
     bool vis = true;
+    StudentDetails studentDetails;
     final _globalkey = GlobalKey<FormState>();
-    NetworkHandler networkHandler = NetworkHandler();
     TextEditingController _usernameController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     String errorText;
-    bool validate = false;
     bool circular = false;
-    //final storage = new FlutterSecureStorage();
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -68,27 +66,6 @@ import 'HomePage.dart';
                   SizedBox(
                     height: 20,
                   ),
-
-                    /*mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordPage()));*/
-                        },
-                        child: Text(
-                          "Forgot Password ?",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),*/
-
-
                       InkWell(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -115,40 +92,22 @@ import 'HomePage.dart';
                       setState(() {
                         circular = true;
                       });
-
-                      //Login Logic start here
-                      Map<String, String> data = {
-                        "username": _usernameController.text,
-                        "password": _passwordController.text,
-                      };
-                      var response =
-                      await networkHandler.post("/user/login", data);
-
-                      if (response.statusCode == 200 ||
-                          response.statusCode == 201) {
-                        Map<String, dynamic> output = json.decode(response.body);
-                       // print(output["token"]);
-                        //await storage.write(key: "token", value: output["token"]);
+                      if(_globalkey.currentState.validate()){
+                        // we will send the data to rest server
+                        studentDetails =
+                            StudentDetails(username: _usernameController.text, password: _passwordController.text);
+                        findUser(studentDetails);
                         setState(() {
-                          validate = true;
-                          circular = false;
-                        });
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ),
-                                (route) => false);
-                      } else {
-                        String output = json.decode(response.body);
-                        setState(() {
-                          validate = false;
-                          errorText = output;
-                          circular = false;
+                          //actually we'll move to dashboard "HomePage.dart" now
+                          circular=false;
                         });
                       }
-
-                      // login logic End here
+                      else
+                      {
+                        setState(() {
+                          circular=false;
+                        });
+                      }
                     },
                     child: Container(
                       width: 150,
@@ -184,55 +143,122 @@ import 'HomePage.dart';
     }
 
     Widget usernameTextField() {
-      return Column(
-        children: [
-          Text("Username"),
-          TextFormField(
-            controller: _usernameController,
-            decoration: InputDecoration(
-              errorText: validate ? null : errorText,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+        child: Column(
+          children: [
+            Text("Username"),
+            TextFormField(
+              controller: _usernameController,
+              validator: (value)
+              {
+                if(value.isEmpty)
+                  return "username field cannot be empty!";
+                return null;
+              },
+              decoration: InputDecoration(
+                //errorText: validateUsername ? null : errorText,
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                    width: 2,
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     }
 
     Widget passwordTextField() {
-      return Column(
-        children: [
-          Text("Password"),
-          TextFormField(
-            controller: _passwordController,
-            obscureText: vis,
-            decoration: InputDecoration(
-              errorText: validate ? null : errorText,
-              suffixIcon: IconButton(
-                icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
-                onPressed: () {
-                  setState(() {
-                    vis = !vis;
-                  });
-                },
-              ),
-              helperStyle: TextStyle(
-                fontSize: 14,
-              ),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+        child: Column(
+          children: [
+            Text("Password"),
+            TextFormField(
+              controller: _passwordController,
+              validator: (value)
+              {
+                if(value.isEmpty)
+                  return "password field cannot be empty!";
+                if(value.length<8)
+                  return "password length must be>=8";
+                return null;
+              },
+
+              obscureText: vis,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  icon: Icon(vis ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () {
+                    setState(() {
+                      vis = !vis;
+                    });
+                  },
+                ),
+                helperText: "Password length should have >=8",
+                helperStyle: TextStyle(
+                  fontSize: 14,
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                    width: 2,
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
+    }
+
+    findUser(StudentDetails userDetails) async {
+      var url2 = REGISTER_API_URL+"/signin";
+      SigninDetails signinDetails;
+      try {
+        final http.Response response = await http.post(url2,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: convert.jsonEncode(<String, String>{
+              'username': studentDetails.username,
+              'password': studentDetails.password,
+            }));
+        print(response.statusCode);
+        var jsonResponse = convert.jsonDecode(response.body);
+        print(jsonResponse);
+        if (response.statusCode == 200) {
+          setState(() {
+            signinDetails = SigninDetails(
+              username: jsonResponse['username'],
+              email: jsonResponse['email'],
+              course: jsonResponse['course']
+            );
+          });
+          print(signinDetails);
+          print('Sign in sucessfully');
+          final snackBar = SnackBar(
+              content: Text(studentDetails.username + " Signed in successfully"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //Navigator.of(context).popAndPushNamed('/main');
+
+          // If the server did return a 201 CREATED response,
+          // then parse the JSON.
+        } else {
+          // If the server did not return a 201 CREATED response,
+          // then throw an exception.
+          final snackBar = SnackBar(
+              content: Text(jsonResponse['msg']));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          throw Exception('Wrong email or password');
+        }
+      }
+      catch(Exception){
+        print(Exception);
+      }
     }
   }
 

@@ -1,7 +1,12 @@
 
-
 import 'package:flutter/material.dart';
-import 'package:group_study/NetworkHandler.dart';
+import 'package:group_study/pages/SignInPage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+import 'StudentDetails.dart';
+
+const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
+
 class SignUpPage extends StatefulWidget {
 
   //WelcomePage({Key key}) : super(key:key);
@@ -34,13 +39,13 @@ class SignUpPage extends StatefulWidget {
     "MBBS",
   ];
   final _globalkey= GlobalKey<FormState>();
-  NetworkHandler networkHandler= NetworkHandler();
+  StudentDetails studentDetails;
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   String errorText;
-  bool validateUsername=false;
   bool circularLoading=false;
     @override
     Widget build(BuildContext context){
@@ -86,8 +91,29 @@ class SignUpPage extends StatefulWidget {
           passwordTextField(),
 
           SizedBox(
-            height: 15,
+            height: 20,
           ),
+
+              InkWell(
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SignInPage()));
+                },
+                child: Text(
+                  "ALready have an account? SIGN IN",
+                  style: TextStyle(
+                    color: Colors.blue[900],
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height: 30,
+              ),
 
 
 InkWell(
@@ -95,20 +121,11 @@ InkWell(
     setState(() {
       circularLoading=true;
     });
-    await checkUser();
-   if(_globalkey.currentState.validate() && validateUsername){
-
+   if(_globalkey.currentState.validate()){
      // we will send the data to rest server
-     Map<String, String> data = {
-       "name": _nameController.text,
-       "course": coursechosen,
-       "username": _usernameController.text,
-       "email": _emailController.text,
-       "password": _passwordController.text,
-     };
-     print(data);
-     //print("validate");
-     await networkHandler.post("/user/register", data);
+     studentDetails = StudentDetails(name:_nameController.text,course: coursechosen,email: _emailController.text,
+         username:_usernameController.text,password: _passwordController.text);
+     createUser(studentDetails);
      setState(() {
        //actually we'll move to dashboard "HomePage.dart" now
        circularLoading=false;
@@ -140,49 +157,14 @@ InkWell(
                     ),
                   ),
                 ),
-)
-
-
-
-
-          ]
+)]
         ),
       ),
       ),
         ),
       );
     }
-checkUser()async{
-      if(_usernameController.text.length==0)
-        {
-          setState(() {
-            //circularLoading=false;
-            validateUsername=false;
-           errorText="Username cannot be empty";
-          });
-        }
-      else
-       {
-         var response= await networkHandler.get("/user/checkUsername/${_usernameController.text}");
-         if(response['Status'])
-           {
-             setState(() {
-               //circularLoading=false;
-               validateUsername=false;
-               errorText="Username already exists";
-             });
-           }
-         else
-           {
-             setState(() {
-               //circularLoading=false;
-               validateUsername=true;
 
-             });
-           }
-       }
-
-}
   Widget nameTextField() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
@@ -241,24 +223,6 @@ checkUser()async{
 
             }).toList(),
           ),
-          /*TextFormField(
-            validator: (value)
-            {
-              if(value.isEmpty)
-                return "course cannot be empty!";
-              return null;
-            },
-            // controller: _usernameController,
-            decoration: InputDecoration(
-              //errorText: validate ? null : errorText,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.black,
-                  width: 2,
-                ),
-              ),
-            ),
-          )*/
         ],
       ),
     );
@@ -273,17 +237,15 @@ checkUser()async{
           children: [
             Text("Username"),
             TextFormField(
-
-             /* validator: (value)
+              controller: _usernameController,
+              validator: (value)
               {
                 if(value.isEmpty)
-                  return "username cannot be empty!";
+                  return "username field cannot be empty!";
                 return null;
-              },*/
-
-              controller: _usernameController,
+              },
               decoration: InputDecoration(
-                errorText: validateUsername ? null : errorText,
+                //errorText: validateUsername ? null : errorText,
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
@@ -313,12 +275,6 @@ checkUser()async{
                   return "email is invalid!";
                 return null;
               },
-              /*controller: _emailController,
-              validator: (value) {
-                if (value.isEmpty) return "Email can't be empty";
-                if (!value.contains("@")) return "Email is Invalid";
-                return null;
-              },*/
               decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -377,8 +333,35 @@ checkUser()async{
       );
     }
 
-
-
-
+  createUser(StudentDetails studentDetails) async {
+    var url=REGISTER_API_URL+"/signup";
+    final http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: convert.jsonEncode(<String, String>{
+          'name':studentDetails.name,
+          'course': studentDetails.course,
+          'username': studentDetails.username,
+          'email':studentDetails.email,
+          'password':studentDetails.password,
+        }));
+    var jsonResponse=convert.jsonDecode(response.body);
+    print(jsonResponse);
+    if (response.statusCode == 200) {
+      // If the server did return a 201 CREATED response,
+      // then parse the JSON.
+      final snackBar = SnackBar(content: Text(studentDetails.username+" registered sucessfully"));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //Navigator.of(context).popAndPushNamed('/main');
+    }
+    else{
+      final snackBar = SnackBar(content: Text(jsonResponse['msg']));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //Navigator.of(context).popAndPushNamed('/main');
+      throw Exception('Failed to load details');
+    }
+  }
 
   }
