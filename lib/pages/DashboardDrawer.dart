@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:group_study/pages/WelcomePage.dart';
 
-class DashboardDrawer extends StatelessWidget {
+import 'StudentDetails.dart';
+String name;
+String username;
+String email;
+String course;
+String password;
+
+class DashboardDrawer extends StatefulWidget {
+
+  DashboardDrawer(StudentDetails studentDetails){
+    name=studentDetails.name;
+    username=studentDetails.username;
+    email=studentDetails.email;
+    course=studentDetails.course;
+    password=studentDetails.password;
+  }
+
+  @override
+  _DashboardDrawerState createState() => _DashboardDrawerState();
+}
+
+class _DashboardDrawerState extends State<DashboardDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -27,10 +49,10 @@ class DashboardDrawer extends StatelessWidget {
                     ),
 
                   ),
-                  Text('User_name', style:TextStyle(fontSize: 22,color: Colors.white
+                  Text(username, style:TextStyle(fontSize: 22,color: Colors.white
                   ),
                   ),
-                  Text('Full Name', style:TextStyle(color: Colors.white
+                  Text(name, style:TextStyle(color: Colors.white
                   ),
                   ),
 

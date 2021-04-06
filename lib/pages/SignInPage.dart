@@ -5,8 +5,7 @@ import 'package:group_study/pages/SignUpPage.dart';
 import 'package:group_study/pages/StudentDetails.dart';
  import 'package:http/http.dart' as http;
  import 'dart:convert' as convert;
-
-import 'SigninDetails.dart';
+import 'HomePage.dart';
 
 const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
 
@@ -217,7 +216,7 @@ const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
 
     findUser(StudentDetails userDetails) async {
       var url2 = REGISTER_API_URL+"/signin";
-      SigninDetails signinDetails;
+      StudentDetails signinDetails;
       try {
         final http.Response response = await http.post(url2,
             headers: <String, String>{
@@ -228,23 +227,27 @@ const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
               'password': studentDetails.password,
             }));
         print(response.statusCode);
-        var jsonResponse = convert.jsonDecode(response.body);
+        var jsonResponse = convert.jsonDecode(response.body)['result'];
         print(jsonResponse);
         if (response.statusCode == 200) {
           setState(() {
-            signinDetails = SigninDetails(
+            signinDetails =new StudentDetails(
+                name: jsonResponse['name'],
               username: jsonResponse['username'],
               email: jsonResponse['email'],
-              course: jsonResponse['course']
+              course: jsonResponse['course'],
+              password: jsonResponse['password']
             );
           });
-          print(signinDetails);
+          print(signinDetails.username);
           print('Sign in sucessfully');
           final snackBar = SnackBar(
-              content: Text(studentDetails.username + " Signed in successfully"));
+              content: Text(signinDetails.username + " Signed in successfully"));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          //Navigator.of(context).popAndPushNamed('/main');
-
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(signinDetails)));
           // If the server did return a 201 CREATED response,
           // then parse the JSON.
         } else {

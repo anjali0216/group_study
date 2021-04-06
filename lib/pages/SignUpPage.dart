@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:group_study/pages/SignInPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'DashboardDrawer.dart';
+import 'HomePage.dart';
 import 'StudentDetails.dart';
 
 const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
@@ -13,6 +15,8 @@ class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
   }
+
+
   class _SignUpPageState extends State<SignUpPage> {
   bool vis=true;
   String valuechoose;
@@ -335,6 +339,7 @@ InkWell(
 
   createUser(StudentDetails studentDetails) async {
     var url=REGISTER_API_URL+"/signup";
+    //StudentDetails studentDetails;
     final http.Response response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
@@ -354,7 +359,10 @@ InkWell(
       // then parse the JSON.
       final snackBar = SnackBar(content: Text(studentDetails.username+" registered sucessfully"));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //Navigator.of(context).popAndPushNamed('/main');
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(studentDetails)));
     }
     else{
       final snackBar = SnackBar(content: Text(jsonResponse['msg']));
