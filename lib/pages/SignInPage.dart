@@ -1,4 +1,3 @@
- import 'dart:io';
 
 import 'package:group_study/pages/SignUpPage.dart';
   import "package:flutter/material.dart";
@@ -7,7 +6,7 @@ import 'package:group_study/pages/StudentDetails.dart';
  import 'dart:convert' as convert;
 import 'HomePage.dart';
 
-const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
+const REGISTER_API_URL = 'http://192.168.224.1:3000/student';
 
   class SignInPage extends StatefulWidget {
     SignInPage({Key key}) : super(key: key);
@@ -227,16 +226,16 @@ const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
               'password': studentDetails.password,
             }));
         print(response.statusCode);
-        var jsonResponse = convert.jsonDecode(response.body)['result'];
-        print(jsonResponse);
+        var jsonResponse;
         if (response.statusCode == 200) {
+          jsonResponse = convert.jsonDecode(response.body)['result'];
+          print(jsonResponse);
           setState(() {
             signinDetails =new StudentDetails(
                 name: jsonResponse['name'],
               username: jsonResponse['username'],
               email: jsonResponse['email'],
               course: jsonResponse['course'],
-              password: jsonResponse['password']
             );
           });
           print(signinDetails.username);
@@ -251,6 +250,7 @@ const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
           // If the server did return a 201 CREATED response,
           // then parse the JSON.
         } else {
+          jsonResponse=convert.jsonDecode(response.body);
           // If the server did not return a 201 CREATED response,
           // then throw an exception.
           final snackBar = SnackBar(

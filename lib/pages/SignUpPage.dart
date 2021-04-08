@@ -7,7 +7,7 @@ import 'DashboardDrawer.dart';
 import 'HomePage.dart';
 import 'StudentDetails.dart';
 
-const REGISTER_API_URL = 'http://192.168.43.41:3000/student';
+const REGISTER_API_URL = 'http://192.168.224.1:3000/student';
 
 class SignUpPage extends StatefulWidget {
 
@@ -15,7 +15,6 @@ class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
   }
-
 
   class _SignUpPageState extends State<SignUpPage> {
   bool vis=true;
@@ -127,7 +126,7 @@ InkWell(
     });
    if(_globalkey.currentState.validate()){
      // we will send the data to rest server
-     studentDetails = StudentDetails(name:_nameController.text,course: coursechosen,email: _emailController.text,
+     studentDetails = StudentDetails(name:_nameController.text,course: valuechoose,email: _emailController.text,
          username:_usernameController.text,password: _passwordController.text);
      createUser(studentDetails);
      setState(() {

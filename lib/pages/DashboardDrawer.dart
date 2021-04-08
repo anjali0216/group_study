@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:group_study/pages/WelcomePage.dart';
-
 import 'StudentDetails.dart';
 String name;
 String username;
@@ -87,10 +85,10 @@ leading: Icon(Icons.group),
 
           ListTile(
             leading: Icon(Icons.remove_red_eye_outlined),
-            title: Text('View Current meeting schedule', style:TextStyle(fontSize: 18,
+            title: Text('View current meeting schedule', style:TextStyle(fontSize: 18,
             ),
             ),
-            onTap: null,
+            onTap:  null,
           ),
 
           ListTile(
