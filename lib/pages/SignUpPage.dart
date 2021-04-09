@@ -7,7 +7,7 @@ import 'DashboardDrawer.dart';
 import 'HomePage.dart';
 import 'StudentDetails.dart';
 
-const REGISTER_API_URL = 'http://192.168.224.1:3000/student';
+const REGISTER_API_URL = 'http://192.168.1.4:3000/student';
 
 class SignUpPage extends StatefulWidget {
 
@@ -48,6 +48,7 @@ class SignUpPage extends StatefulWidget {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _instituteController = TextEditingController();
   String errorText;
   bool circularLoading=false;
     @override
@@ -89,6 +90,7 @@ class SignUpPage extends StatefulWidget {
 
           nameTextField(),
           courseTextField(),
+          instituteTextField(),
           usernameTextField(),
           emailTextField(),
           passwordTextField(),
@@ -126,7 +128,7 @@ InkWell(
     });
    if(_globalkey.currentState.validate()){
      // we will send the data to rest server
-     studentDetails = StudentDetails(name:_nameController.text,course: valuechoose,email: _emailController.text,
+     studentDetails = StudentDetails(name:_nameController.text,course: valuechoose,institute:_instituteController.text,email: _emailController.text,
          username:_usernameController.text,password: _passwordController.text);
      createUser(studentDetails);
      setState(() {
@@ -230,6 +232,38 @@ InkWell(
       ),
     );
   }
+
+  Widget instituteTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+      child: Column(
+        children: [
+          Text("Institute/School/College"),
+          TextFormField(
+            //controller: _instituteController,
+            validator: (value)
+            {
+              if(value.isEmpty)
+                return "institute field cannot be empty!";
+              return null;
+            },
+            controller: _instituteController,
+            decoration: InputDecoration(
+              //errorText: validate ? null : errorText,
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+              ),
+            ),
+
+          )
+        ],
+      ),
+    );
+  }
+
 
 
 
@@ -347,6 +381,7 @@ InkWell(
         body: convert.jsonEncode(<String, String>{
           'name':studentDetails.name,
           'course': studentDetails.course,
+          'institute': studentDetails.institute,
           'username': studentDetails.username,
           'email':studentDetails.email,
           'password':studentDetails.password,

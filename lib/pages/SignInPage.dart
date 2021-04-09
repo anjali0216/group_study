@@ -6,7 +6,7 @@ import 'package:group_study/pages/StudentDetails.dart';
  import 'dart:convert' as convert;
 import 'HomePage.dart';
 
-const REGISTER_API_URL = 'http://192.168.224.1:3000/student';
+const REGISTER_API_URL = 'http://192.168.1.4:3000/student';
 
   class SignInPage extends StatefulWidget {
     SignInPage({Key key}) : super(key: key);
@@ -236,6 +236,7 @@ const REGISTER_API_URL = 'http://192.168.224.1:3000/student';
               username: jsonResponse['username'],
               email: jsonResponse['email'],
               course: jsonResponse['course'],
+              institute: jsonResponse['institute']
             );
           });
           print(signinDetails.username);

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'SearchPeerPage.dart';
 import 'StudentDetails.dart';
 String name;
 String username;
 String email;
 String course;
-String password;
+String institute;
+//String password;
 
 class DashboardDrawer extends StatefulWidget {
 
@@ -13,7 +15,8 @@ class DashboardDrawer extends StatefulWidget {
     username=studentDetails.username;
     email=studentDetails.email;
     course=studentDetails.course;
-    password=studentDetails.password;
+    institute=studentDetails.institute;
+    //password=studentDetails.password;
   }
 
   @override
@@ -53,20 +56,33 @@ class _DashboardDrawerState extends State<DashboardDrawer> {
                   Text(name, style:TextStyle(color: Colors.white
                   ),
                   ),
+                  Text(institute, style:TextStyle(color: Colors.white
+                  ),
+                  ),
+                  Text(course, style:TextStyle(color: Colors.white
+                  ),
+                  ),
 
                 ],
               ),
             ),
           ),
-ListTile(
-leading: Icon(Icons.group),
-  title: Text('Find Peers from same course',
+          ListTile(
+            leading: Icon(Icons.group),
+            title: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => SearchPeerPage(),
+                ));
+              },
+              child: Text('Find Peers from same Institute and course',
 
-    style:TextStyle(fontSize: 18,
-  ),
-  ),
-  onTap: null,
-),
+                style:TextStyle(fontSize: 18
+                ),
+              ),
+            ),
+            // onTap: null,
+          ),
           ListTile(
             leading: Icon(Icons.school),
             title: Text('Find Teachers', style:TextStyle(fontSize: 18,

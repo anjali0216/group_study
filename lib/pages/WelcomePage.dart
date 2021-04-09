@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:group_study/pages/SearchPeerPage.dart';
 
+import 'Chat/ChatHomeScreen.dart';
 import 'SignUpPage.dart';
 import 'package:http/http.dart' as http;
 
@@ -145,6 +147,23 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                       ),
                     ),
+
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SearchPeerPage(),
+                        ));
+                      },
+                      child: Text(
+                        "Demo Chat/search",
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
 
