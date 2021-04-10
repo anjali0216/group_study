@@ -54,9 +54,12 @@ class _WelcomePageState extends State<WelcomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
           child: Column(
             children: [
+
                Text(
-                  "STUDY BUDDIES",
+                  "STUDY HUB for Students",
+                 textAlign: TextAlign.center,
                   style: TextStyle(
+
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 2,
@@ -69,7 +72,7 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
 
                  Text(
-                  " Come together to experience virtual study sessions with your peers and teachers!",
+                  " Come together to experience virtual study sessions with your peers and connect with new people!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -85,6 +88,7 @@ class _WelcomePageState extends State<WelcomePage> {
 
               Text(
                 "New Here?",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 20,
@@ -102,6 +106,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 },
                 child: Text(
                   "Sign UP",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.blueAccent,
                     fontSize: 30,
@@ -116,7 +121,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 onEmailClick,
               ),*/
               SizedBox(
-                height: 30,
+                height: 20,
               ),
 
                  Column(
@@ -124,6 +129,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   children: [
                     Text(
                       "Already have an account?",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 20,
@@ -140,6 +146,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       },
                       child: Text(
                         "Sign In",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.blueAccent,
                           fontSize: 30,
@@ -148,21 +155,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
 
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SearchPeerPage(),
-                        ));
-                      },
-                      child: Text(
-                        "Demo Chat/search",
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+
 
                   ],
                 ),

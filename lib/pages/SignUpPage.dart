@@ -49,6 +49,7 @@ class SignUpPage extends StatefulWidget {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _instituteController = TextEditingController();
+  TextEditingController _specializationController = TextEditingController();
   String errorText;
   bool circularLoading=false;
     @override
@@ -84,19 +85,23 @@ class SignUpPage extends StatefulWidget {
           ),
 
           SizedBox(
-            height: 10,
+            //height: 10,
+            height: 5,
           ),
 
 
           nameTextField(),
           courseTextField(),
+          specializationTextField(),
+
           instituteTextField(),
           usernameTextField(),
           emailTextField(),
           passwordTextField(),
 
           SizedBox(
-            height: 20,
+            //height: 20,
+            height: 10,
           ),
 
               InkWell(
@@ -117,7 +122,8 @@ class SignUpPage extends StatefulWidget {
               ),
 
               SizedBox(
-                height: 30,
+                //height: 30,
+                height: 15,
               ),
 
 
@@ -128,7 +134,7 @@ InkWell(
     });
    if(_globalkey.currentState.validate()){
      // we will send the data to rest server
-     studentDetails = StudentDetails(name:_nameController.text,course: valuechoose,institute:_instituteController.text,email: _emailController.text,
+     studentDetails = StudentDetails(name:_nameController.text,course: valuechoose,specialization: _specializationController.text,institute:_instituteController.text,email: _emailController.text,
          username:_usernameController.text,password: _passwordController.text);
      createUser(studentDetails);
      setState(() {
@@ -172,7 +178,7 @@ InkWell(
 
   Widget nameTextField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
       child: Column(
         children: [
           Text("Your full name"),
@@ -201,7 +207,7 @@ InkWell(
 
   Widget courseTextField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
       child: Column(
         children: [
           //Text("Select your Grade/ graduation course"),
@@ -233,9 +239,41 @@ InkWell(
     );
   }
 
+  Widget specializationTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
+      child: Column(
+        children: [
+          Text(
+              "Enter your branch/specialization(eg:Mechanical Engineering)"),
+          TextFormField(
+            //controller: _specializationController,
+            validator: (value)
+            {
+              if(value.isEmpty)
+                return "Specialization field cannot be empty!...Enter NA if not valid";
+              return null;
+            },
+            controller: _specializationController,
+            decoration: InputDecoration(
+              //errorText: validate ? null : errorText,
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 2,
+                ),
+              ),
+            ),
+
+          )
+        ],
+      ),
+    );
+  }
+
   Widget instituteTextField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
       child: Column(
         children: [
           Text("Institute/School/College"),
@@ -269,7 +307,7 @@ InkWell(
 
     Widget usernameTextField() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
         child: Column(
           children: [
             Text("Username"),
@@ -298,7 +336,7 @@ InkWell(
 
     Widget emailTextField() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
         child: Column(
           children: [
             Text("Email"),
@@ -328,7 +366,7 @@ InkWell(
 
     Widget passwordTextField() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 1.0),
         child: Column(
           children: [
             Text("Password"),
@@ -381,6 +419,7 @@ InkWell(
         body: convert.jsonEncode(<String, String>{
           'name':studentDetails.name,
           'course': studentDetails.course,
+          'specialization': studentDetails.specialization,
           'institute': studentDetails.institute,
           'username': studentDetails.username,
           'email':studentDetails.email,

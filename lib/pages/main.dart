@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:group_study/pages/WelcomePage.dart';
+import 'package:group_study/pages/WelcomeScreen1.dart';
 
 import 'DashboardDrawer.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: WelcomePage(),
+      home: WelcomeScreen1(),
     );
   }
 }

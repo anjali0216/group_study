@@ -236,6 +236,7 @@ const REGISTER_API_URL = 'http://192.168.1.4:3000/student';
               username: jsonResponse['username'],
               email: jsonResponse['email'],
               course: jsonResponse['course'],
+                specialization: jsonResponse['specialization'],
               institute: jsonResponse['institute']
             );
           });
