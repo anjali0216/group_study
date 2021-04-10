@@ -6,10 +6,11 @@ import 'package:group_study/pages/StudentDetails.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:jitsi_meet/room_name_constraint.dart';
 import 'package:jitsi_meet/room_name_constraint_type.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 import 'HomePage.dart';
 
-
+const _API_URL = 'http://192.168.224.1:3000/student';
 
 
 class StartMeeting extends StatefulWidget {
@@ -30,13 +31,11 @@ class _StartMeetingState extends State<StartMeeting> {
     this.details=details;
   }
 
-  final roomText = TextEditingController(text: "plugintestroom");
+  final roomText = TextEditingController(text: "");
   final subjectText = TextEditingController(text: "");
   var isAudioOnly = true;
   var isAudioMuted = true;
   var isVideoMuted = true;
-
-
 
   @override
   void initState() {
@@ -60,15 +59,15 @@ class _StartMeetingState extends State<StartMeeting> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Start a meeting'),
-          leading: IconButton(icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(details)));
-              }
-          )
+            title: const Text('Start a meeting'),
+            leading: IconButton(icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage(details)));
+                }
+            )
         ),
         body: Container(
           padding: const EdgeInsets.symmetric(
@@ -115,6 +114,10 @@ class _StartMeetingState extends State<StartMeeting> {
           SizedBox(
             height: 14.0,
           ),
+          Text('The room name length should be <= 30. Only alphanumeric, dash and underscore characters allowed.'),
+          SizedBox(
+            height: 14.0,
+          ),
           TextField(
             controller: roomText,
             decoration: InputDecoration(
@@ -128,9 +131,9 @@ class _StartMeetingState extends State<StartMeeting> {
           TextField(
             controller: subjectText,
             decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: "Subject",
-              hintText: "Enter the topic you want to discuss"
+                border: OutlineInputBorder(),
+                labelText: "Subject",
+                hintText: "Enter the topic you want to discuss"
             ),
           ),
           SizedBox(
@@ -168,11 +171,25 @@ class _StartMeetingState extends State<StartMeeting> {
             height: 64.0,
             width: double.maxFinite,
             child: RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 _joinMeeting();
+                var url=_API_URL+"/sendMail";
+                //StudentDetails studentDetails;
+                final http.Response response =await http.post(
+                    Uri.parse(url),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: convert.jsonEncode(<String, String>{
+                      'username': details.username,
+                      'course': details.course,
+                      'topic': subjectText.text,
+                      'room': roomText.text
+                    }));
+                print(response);
               },
               child: Text(
-                "Join Meeting",
+                "Start Meeting",
                 style: TextStyle(color: Colors.white),
               ),
               color: Colors.blue,
@@ -218,7 +235,7 @@ class _StartMeetingState extends State<StartMeeting> {
       if (Platform.isAndroid) {
         // Disable ConnectionService usage on Android to avoid issues (see README)
         featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
-       // featureFlags[FeatureFlagEnum.ADD_PEOPLE_ENABLED]=false;
+        // featureFlags[FeatureFlagEnum.ADD_PEOPLE_ENABLED]=false;
         featureFlags[FeatureFlagEnum.INVITE_ENABLED]=false;
       } else if (Platform.isIOS) {
         // Disable PIP on iOS as it looks weird
@@ -346,7 +363,7 @@ class _JoinMeetingState extends State<JoinMeeting> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+            title: const Text('Join a meeting'),
             leading: IconButton(icon: Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pushReplacement(
@@ -514,7 +531,7 @@ class _JoinMeetingState extends State<JoinMeeting> {
     var options = JitsiMeetingOptions()
       ..room = roomText.text
       ..serverURL =serverUrl
-      //..subject = subjectText.text
+    //..subject = subjectText.text
       ..userDisplayName = details.username
       ..userEmail = details.email
       ..iosAppBarRGBAColor = "#0080FF80"

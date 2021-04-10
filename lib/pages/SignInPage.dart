@@ -6,7 +6,7 @@ import 'package:group_study/pages/StudentDetails.dart';
  import 'dart:convert' as convert;
 import 'HomePage.dart';
 
-const REGISTER_API_URL = 'http://192.168.1.4:3000/student';
+const REGISTER_API_URL = 'http://192.168.1.102:3000/student';
 
   class SignInPage extends StatefulWidget {
     SignInPage({Key key}) : super(key: key);
@@ -177,14 +177,14 @@ const REGISTER_API_URL = 'http://192.168.1.4:3000/student';
             Text("Password"),
             TextFormField(
               controller: _passwordController,
-              validator: (value)
+             /* validator: (value)
               {
                 if(value.isEmpty)
                   return "password field cannot be empty!";
                 if(value.length<8)
                   return "password length must be>=8";
                 return null;
-              },
+              },*/
 
               obscureText: vis,
               decoration: InputDecoration(

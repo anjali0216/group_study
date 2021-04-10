@@ -1,12 +1,7 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:group_study/pages/SearchPeerPage.dart';
 import 'package:group_study/pages/WelcomePage.dart';
 
-import 'Chat/ChatHomeScreen.dart';
-import 'SignUpPage.dart';
-import 'package:http/http.dart' as http;
 
 import 'SignInPage.dart';
 
